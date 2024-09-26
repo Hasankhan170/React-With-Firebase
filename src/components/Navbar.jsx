@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
     return (
         <>
-          <div style={{ backgroundColor: 'blue' ,  }} className="navbar bg-base-100 px-5">
+          <div className="navbar bg-base-100 px-5 bg-warning ">
             <div className="flex-1">
               <a className="btn btn-ghost text-xl text-white">Blogging App</a>
             </div>
