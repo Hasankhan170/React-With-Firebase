@@ -10,7 +10,6 @@ import Dashboard from './pages/Dashboard.jsx'
 import SinglePage from './pages/SinglePage.jsx'
 import Profile from './pages/Profile.jsx'
 import ProtectRoutes from './components/ProtectRoutes.jsx'
-import Logout from './pages/Logout.jsx'
 
 const router = createBrowserRouter([
   {
@@ -40,10 +39,6 @@ const router = createBrowserRouter([
       {
         path : 'Profile',
         element : <ProtectRoutes component={<Profile/>}/>
-      },
-      {
-        path : 'Logout',
-        element : <ProtectRoutes component={<Logout/>}/>
       },
       {
         path : '*',

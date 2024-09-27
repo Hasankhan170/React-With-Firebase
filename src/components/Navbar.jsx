@@ -1,12 +1,27 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../config/FirebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { signOut } from "firebase/auth";
 
 
 const Navbar = () => {
 
   const [profileGet,setProfileGet] = useState(null)
+  const navigate = useNavigate()
+
+  const handleLogout = ()=>{
+      const user = signOut(auth).then(() => {
+      if(user){
+        navigate('/login')
+      }else{
+        console.log('User signed out');
+      }
+   }).catch((error) => { 
+      console.log(error);
+  
+});
+  }
 
   useEffect(()=>{
     const fetchUserProfile = async (user)=>{
@@ -64,7 +79,7 @@ const Navbar = () => {
                   <li><Link to= "Profile" className="justify-between">Profile</Link></li>
                   <li><Link to= "Dashboard">DashBoard</Link></li>
                   <li><Link to= "SinglePage">SinglePage</Link></li>
-                  <li><Link to= "Logout">Logout</Link></li>
+                  <li><button onClick={handleLogout}>Logout</button></li>
                 </ul>
               </div>
             </div>
