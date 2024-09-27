@@ -1,7 +1,42 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { auth, db } from "../config/FirebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 
 const Navbar = () => {
+
+  const [profileGet,setProfileGet] = useState(null)
+
+  useEffect(()=>{
+    const fetchUserProfile = async (user)=>{
+      if(user){
+        const docRef= doc(db,'users', user.uid)
+         // 'getDoc' ke through hum database se user ka document fetch kar rahe hain
+        const docSnap = await getDoc(docRef)
+        console.log(docSnap);
+
+        // Agar document exist karta hai toh
+        if(docSnap.exists()){
+           // User ki profile image URL ko 'profileGet' state mein store kar rahe hain
+          setProfileGet(docSnap.data().profileImage)
+        }else{
+          console.log("No such document!");
+        }
+      }else{
+        // Agar user logged out hai toh state ko null kar do
+        setProfileGet(null)
+      }
+    }
+
+
+    const unSubscribe = auth.onAuthStateChanged(async (user)=>{ // Auth state change listener
+      await fetchUserProfile(user); // User profile ko fetch karo
+    })
+   
+    return ()=> unSubscribe() // Cleanup function
+  },[])
+
     return (
         <>
           <div className="navbar bg-base-100 px-5 bg-warning ">
@@ -16,7 +51,7 @@ const Navbar = () => {
                   <div className="w-10 rounded-full">
                     <img
                       alt="User Avatar"
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                      src={profileGet}
                     />
                   </div>
                 </div>

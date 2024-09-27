@@ -4,9 +4,12 @@ import { auth, db, storage } from "../config/FirebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 
 const Register = () => {
+
+  const navigate = useNavigate()
 
 
   const {
@@ -44,6 +47,8 @@ const Register = () => {
       })
 
       reset()
+
+      navigate('/Login')
 
       
 

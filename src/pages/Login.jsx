@@ -1,9 +1,12 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useForm } from "react-hook-form"
 import { auth } from "../config/FirebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
+
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -19,6 +22,8 @@ const Login = () => {
       console.log(user);
 
       reset()
+
+      navigate('/Dashboard')
     } catch (error) {
       console.log(error);
       
