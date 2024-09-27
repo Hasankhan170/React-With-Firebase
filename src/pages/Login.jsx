@@ -1,4 +1,6 @@
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useForm } from "react-hook-form"
+import { auth } from "../config/FirebaseConfig";
 
 const Login = () => {
 
@@ -6,12 +8,24 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm()
 
-  const loginUser = (data)=>{
-    console.log(data);
+  const loginUser = async (data)=>{
+    const {email,password} = data;
     
+    try {
+      const user = await signInWithEmailAndPassword(auth,email,password);
+      console.log(user);
+
+      reset()
+    } catch (error) {
+      console.log(error);
+      
+    }
   }
+
+
   return (
     <>
       <div className="flex justify-center mt-5 p-5">

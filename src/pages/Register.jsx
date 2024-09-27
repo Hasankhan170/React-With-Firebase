@@ -13,6 +13,7 @@ const Register = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm()
 
   const registerUser = async (data) => {
@@ -27,7 +28,7 @@ const Register = () => {
       const storageRef = ref(storage,`users/${user.uid}`)
       await uploadBytes(storageRef,imageFile)
       console.log(imageFile);
-      console.log(storageRef);
+      console.log(storageRef.fullPath);
 
       const downloadUrl = await getDownloadURL(storageRef)
       console.log(downloadUrl);
@@ -40,6 +41,8 @@ const Register = () => {
         email :email,
         profileImage: downloadUrl,
       })
+
+      reset()
 
       
 
