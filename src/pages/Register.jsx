@@ -36,9 +36,7 @@ const Register = () => {
 
       const downloadUrl = await getDownloadURL(storageRef)
       console.log(downloadUrl);
-      
-      
-      
+
 
       await setDoc(doc(db,"users",user.uid),{
         name : name,
