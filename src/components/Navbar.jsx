@@ -64,6 +64,7 @@ const Navbar = () => {
                   <li><Link to= "Profile" className="justify-between">Profile</Link></li>
                   <li><Link to= "Dashboard">DashBoard</Link></li>
                   <li><Link to= "SinglePage">SinglePage</Link></li>
+                  <li><Link to= "Logout">Logout</Link></li>
                 </ul>
               </div>
             </div>
