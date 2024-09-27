@@ -9,6 +9,7 @@ import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import SinglePage from './pages/SinglePage.jsx'
 import Profile from './pages/Profile.jsx'
+import ProtectRoutes from './components/ProtectRoutes.jsx'
 
 const router = createBrowserRouter([
   {
@@ -20,12 +21,12 @@ const router = createBrowserRouter([
         element : <Home/>
       },
       {
-        path : 'Dashboard',
-        element : <Dashboard/>
-      },
-      {
         path : 'Login',
         element : <Login/>
+      },
+      {
+        path : 'Dashboard',
+        element : <ProtectRoutes component={<Dashboard/>}/>
       },
       {
         path : 'Register',
@@ -33,11 +34,11 @@ const router = createBrowserRouter([
       },
       {
         path : 'SinglePage',
-        element : <SinglePage/>
+        element : <ProtectRoutes component={<SinglePage/>}/>
       },
       {
         path : 'Profile',
-        element : <Profile/>
+        element : <ProtectRoutes component={<Profile/>}/>
       },
       {
         path : '*',
