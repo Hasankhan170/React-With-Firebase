@@ -11,17 +11,20 @@ const Navbar = () => {
   const navigate = useNavigate()
 
   const handleLogout = ()=>{
-      const user = signOut(auth).then(() => {
-      if(user){
-        navigate('/login')
-      }else{
-        console.log('User signed out');
-      }
-   }).catch((error) => { 
-      console.log(error);
-  
-});
-  }
+    if(auth.currentUser){
+      signOut(auth)
+      .then(() => {
+        navigate('/')
+     })
+     .catch((error) => { 
+        console.log(error);
+     });
+
+    }else{
+      navigate('/Login')
+    }
+
+  };
 
   useEffect(()=>{
     const fetchUserProfile = async (user)=>{
@@ -35,8 +38,6 @@ const Navbar = () => {
         if(docSnap.exists()){
            // User ki profile image URL ko 'profileGet' state mein store kar rahe hain
           setProfileGet(docSnap.data().profileImage)
-        }else{
-          console.log("No such document!");
         }
       }else{
         // Agar user logged out hai toh state ko null kar do
