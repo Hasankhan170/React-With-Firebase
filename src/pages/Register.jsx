@@ -1,8 +1,10 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+
 import { useForm } from "react-hook-form";
-import { auth, db } from "../config/FirebaseConfig";
+import { auth, db, storage } from "../config/FirebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
-// 
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+
 
 const Register = () => {
 
@@ -14,18 +16,32 @@ const Register = () => {
   } = useForm()
 
   const registerUser = async (data) => {
-    const {name,email,password} = data
+    const {name,email,password,file} = data
     console.log(data);
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth,email,password);
       const user = userCredential.user;
+
+      const imageFile = file[0];
+      const storageRef = ref(storage,`users/${user.uid}`)
+      await uploadBytes(storageRef,imageFile)
+      console.log(imageFile);
+      console.log(storageRef);
+
+      const downloadUrl = await getDownloadURL(storageRef)
+      console.log(downloadUrl);
+      
+      
       
 
       await setDoc(doc(db,"users",user.uid),{
         name : name,
         email :email,
+        profileImage: downloadUrl,
       })
+
+      
 
       console.log(user);
     } catch (error) {
