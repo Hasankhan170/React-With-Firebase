@@ -28,7 +28,8 @@ const Register = () => {
       const storageRef = ref(storage,`users/${user.uid}`)
       await uploadBytes(storageRef,imageFile)
       console.log(imageFile);
-      console.log(storageRef.fullPath);
+      console.log(storageRef);
+      
 
       const downloadUrl = await getDownloadURL(storageRef)
       console.log(downloadUrl);
