@@ -1,0 +1,80 @@
+/* dashboard styling  */
+
+
+.dashboard-head{
+    text-align: center;
+    margin-top: 20px;
+  }
+  .dashboard-main{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 30px;
+    border: 1px solid black;
+  }
+  .dashboard-input{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    outline: none;
+    border: 1px solid black;
+  }
+  
+  .dashboard-textarea{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    resize: vertical;
+    max-height: 200px;
+    outline: none;
+    border: 1px solid black;
+  }
+  
+  .publish-blog{
+    padding: 10px 30px;
+    color: black;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  /* under dashboard.js  */
+  
+  
+  .under-rendering{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 30px;
+    border-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 30px;
+    border: 1px solid black;
+    height: auto;
+  
+  }
+  
+  .under-title{
+    gap: 10px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  .under-title p {
+    margin-top: 5px;
+    margin-bottom: 15px;
+  }
+  
+  .under-p p{
+    height: auto;
+    width: auto;
+    overflow-wrap: break-word;
+  }
