@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { auth, db } from "../config/FirebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import '../components/Navbar.css'
 
 
 const Navbar = () => {
 
   const [profileGet,setProfileGet] = useState(null)
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); 
   const navigate = useNavigate()
 
   const handleLogout = ()=>{
@@ -38,10 +40,12 @@ const Navbar = () => {
         if(docSnap.exists()){
            // User ki profile image URL ko 'profileGet' state mein store kar rahe hain
           setProfileGet(docSnap.data().profileImage)
+          setIsUserLoggedIn(true);
         }
       }else{
         // Agar user logged out hai toh state ko null kar do
         setProfileGet(null)
+        setIsUserLoggedIn(false);
       }
     }
 
@@ -80,7 +84,11 @@ const Navbar = () => {
                   <li><Link to= "Profile" className="justify-between">Profile</Link></li>
                   <li><Link to= "Dashboard">DashBoard</Link></li>
                   <li><Link to= "SinglePage">SinglePage</Link></li>
-                  <li><button onClick={handleLogout}>Logout</button></li>
+                  {isUserLoggedIn && (
+                <li>
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+              )}
                 </ul>
               </div>
             </div>

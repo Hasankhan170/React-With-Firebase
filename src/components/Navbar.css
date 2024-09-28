@@ -1,0 +1,7 @@
+.hideLogout {
+    display: none;
+  }
+  
+  .showLogout {
+    display: block;
+  }
