@@ -1,5 +1,7 @@
 import { useForm } from 'react-hook-form'
 import '../pages/Dashboard.css'
+import { addDoc, collection } from 'firebase/firestore';
+import { auth, db } from '../config/FirebaseConfig';
 
 
 const Dashboard = () => {
@@ -8,15 +10,35 @@ const Dashboard = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm()
 
-  const countWords = (str) => {
-    return str.trim().split(/\s+/).filter(word => word !== "").length; // Filter out empty words
-  };
+  const userBlog = async (data) =>{
 
-
-  const userBlog = (data)=>{
+    const {title,description} = data
     console.log(data);
+
+    const user = auth.currentUser;
+    console.log(user);
+    
+
+    if(user){
+      try {
+        const blogRef = collection(db, "blogs")// Reference to Firestore 'blogs' collection
+
+        // Add the blog to Firestore with user's ID
+        await addDoc(blogRef,{
+          userId : user.uid,
+          title: title,
+          description : description
+        })
+
+        reset()
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
   }
 
   
@@ -34,12 +56,10 @@ const Dashboard = () => {
   <div className="dashboard-main">
   <form onSubmit={handleSubmit(userBlog)} className="dashboard-form">
       
-      {/* Title input with validation */}
+      {/* Title input with "required" validation */}
       <input
         {...register("title", {
-          required: "Title is required",
-          validate: (value) =>
-            countWords(value) >= 20 && countWords(value) <= 25 || "Title must be between 20 and 25 words"
+          required: "This field is required"
         })}
         className="dashboard-input"
         type="text"
@@ -49,12 +69,10 @@ const Dashboard = () => {
       
       <br />
 
-      {/* Description textarea with validation */}
+      {/* Description textarea with "required" validation */}
       <textarea
         {...register("description", {
-          required: "Description is required",
-          validate: (value) =>
-            countWords(value) >= 30 && countWords(value) <= 40 || "Description must be between 30 and 40 words"
+          required: "This field is required"
         })}
         className="dashboard-textarea"
         placeholder="Enter Description.."
