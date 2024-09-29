@@ -8,6 +8,8 @@ import '../components/Navbar.css'
 
 const Navbar = () => {
 
+  
+
   const [profileGet,setProfileGet] = useState(null)
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false); 
   const navigate = useNavigate()
