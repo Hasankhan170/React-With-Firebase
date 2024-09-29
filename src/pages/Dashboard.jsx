@@ -3,6 +3,7 @@ import '../pages/Dashboard.css'
 import { addDoc, collection,getDocs, query, where } from 'firebase/firestore';
 import { auth, db } from '../config/FirebaseConfig';
 import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
 
 
 const Dashboard = () => {
@@ -16,28 +17,38 @@ const Dashboard = () => {
     reset,
   } = useForm()
 
-  useEffect(()=>{
-
-    const fecthBlogs = async (userId)=>{
-      const user = auth.currentUser;
-      if(user){
-        try {
-          const blogRef = collection(db,"blogs");
-          const q = query(blogRef, where('userId', '==', userId));
-          const blogSnapShot = await getDocs(q);
-          const blogList = blogSnapShot.docs.map((doc)=>({
-            id: doc.id,
-           ...doc.data()
-          }))
-          setRenderBlogs(blogList)
-        } catch (error) {
-          console.log(error);
-          
-        }
+  useEffect(() => {
+    const fecthBlogs = async (userId) => {
+      try {
+        const blogRef = collection(db, "blogs");
+        const q = query(blogRef, where("userId", "==", userId));
+        const blogSnapShot = await getDocs(q);
+        const blogList = blogSnapShot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRenderBlogs(blogList);
+      } catch (error) {
+        console.log(error);
       }
+    };
+  
+    // Listen to authentication state changes
+    const unSubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User logged in:", user.uid);
+        fecthBlogs(user.uid); // Fetch blogs when the user is logged in
+      } else {
+        console.log("User logged out");
+        setRenderBlogs([]); // Clear the blogs when no user is logged in
+      }
+    });
+  
+    return () => {
+      console.log("Cleaning up the auth listener");
+      unSubscribe(); 
     }
-    fecthBlogs()
-  },[])
+  }, []);
 
   const userBlog = async (data) =>{
 
@@ -69,7 +80,6 @@ const Dashboard = () => {
         setRenderBlogs(blogsList); 
       } catch (error) {
         console.log(error);
-        
       }
     }
   }
