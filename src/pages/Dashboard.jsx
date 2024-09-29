@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import '../pages/Dashboard.css'
-import { addDoc, collection,getDocs, query, where } from 'firebase/firestore';
-import { auth, db } from '../config/FirebaseConfig';
+import { addDoc, collection,doc,getDoc,getDocs, query, where } from 'firebase/firestore';
+import { auth, db} from '../config/FirebaseConfig';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -9,6 +9,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 const Dashboard = () => {
 
   const [renderBlogs,setRenderBlogs] = useState([])
+  const [profileGet,setProfileGet] = useState(null)
+
 
   const {
     register,
@@ -16,6 +18,34 @@ const Dashboard = () => {
     formState: { errors },
     reset,
   } = useForm()
+
+  useEffect(()=>{
+    const userProfileImg = async(user)=>{
+      
+      if(user){
+        const docRef= doc(db,'users', user.uid)
+         // 'getDoc' ke through hum database se user ka document fetch kar rahe hain
+        const docSnap = await getDoc(docRef)
+        console.log(docSnap);
+
+        // Agar document exist karta hai toh
+        if(docSnap.exists()){
+           // User ki profile image URL ko 'profileGet' state mein store kar rahe hain
+          setProfileGet(docSnap.data().profileImage)
+        }
+      }else{
+        // Agar user logged out hai toh state ko null kar do
+        setProfileGet(null)
+      }
+    }
+
+
+    const unSubscribe = auth.onAuthStateChanged(async (user)=>{ // Auth state change listener
+      await userProfileImg(user); // User profile ko fetch karo
+    })
+   
+    return ()=> unSubscribe() // Cleanup function
+  },[setProfileGet])
 
   useEffect(() => {
     const fecthBlogs = async (userId) => {
@@ -40,7 +70,7 @@ const Dashboard = () => {
         fecthBlogs(user.uid); // Fetch blogs when the user is logged in
       } else {
         console.log("User logged out");
-        setRenderBlogs([]); // Clear the blogs when no user is logged in
+        setRenderBlogs([]);
       }
     });
   
@@ -61,13 +91,14 @@ const Dashboard = () => {
 
     if(user){
       try {
+
         const blogRef = collection(db, "blogs")// Reference to Firestore 'blogs' collection
 
         // Add the blog to Firestore with user's ID
         await addDoc(blogRef,{
           userId : user.uid,
           title: title,
-          description : description
+          description : description,
         })
 
         reset()
@@ -137,6 +168,15 @@ const Dashboard = () => {
     renderBlogs.map((blog) => (
       <div key={blog.id} className="under-rendering">
         <div className="under-title">
+        <img
+  style={{
+    width: '50px',
+    height: '50px', // Ensure height matches width
+    borderRadius: '50%', // Make the image circular
+    objectFit: 'cover' // This ensures the image covers the circle
+  }}
+  alt="User Avatar"
+  src={profileGet} />
           <h4>{blog.title}</h4>
         </div>
         <div className="under-p">
