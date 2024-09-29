@@ -1,10 +1,13 @@
 import { useForm } from 'react-hook-form'
 import '../pages/Dashboard.css'
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection,doc,getDocs } from 'firebase/firestore';
 import { auth, db } from '../config/FirebaseConfig';
+import { useEffect, useState } from 'react';
 
 
 const Dashboard = () => {
+
+  const [renderBlogs,setRenderBlogs] = useState([])
 
   const {
     register,
@@ -12,6 +15,25 @@ const Dashboard = () => {
     formState: { errors },
     reset,
   } = useForm()
+
+  useEffect(()=>{
+
+    const fecthBlogs = async ()=>{
+      try {
+        const blogRef = collection(db,"blogs");
+        const blogSnapShot = await getDocs(blogRef);
+        const blogList = blogSnapShot.docs.map((doc)=>({
+          id: doc.id,
+         ...doc.data()
+        }))
+        setRenderBlogs(blogList)
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    fecthBlogs()
+  },[])
 
   const userBlog = async (data) =>{
 
@@ -34,6 +56,13 @@ const Dashboard = () => {
         })
 
         reset()
+
+        const blogSnapshot = await getDocs(blogRef);
+        const blogsList = blogSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRenderBlogs(blogsList); 
       } catch (error) {
         console.log(error);
         
