@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import '../pages/Dashboard.css'
-import { addDoc, collection,doc,getDocs } from 'firebase/firestore';
+import { addDoc, collection,getDocs, query, where } from 'firebase/firestore';
 import { auth, db } from '../config/FirebaseConfig';
 import { useEffect, useState } from 'react';
 
@@ -18,18 +18,22 @@ const Dashboard = () => {
 
   useEffect(()=>{
 
-    const fecthBlogs = async ()=>{
-      try {
-        const blogRef = collection(db,"blogs");
-        const blogSnapShot = await getDocs(blogRef);
-        const blogList = blogSnapShot.docs.map((doc)=>({
-          id: doc.id,
-         ...doc.data()
-        }))
-        setRenderBlogs(blogList)
-      } catch (error) {
-        console.log(error);
-        
+    const fecthBlogs = async (userId)=>{
+      const user = auth.currentUser;
+      if(user){
+        try {
+          const blogRef = collection(db,"blogs");
+          const q = query(blogRef, where('userId', '==', userId));
+          const blogSnapShot = await getDocs(q);
+          const blogList = blogSnapShot.docs.map((doc)=>({
+            id: doc.id,
+           ...doc.data()
+          }))
+          setRenderBlogs(blogList)
+        } catch (error) {
+          console.log(error);
+          
+        }
       }
     }
     fecthBlogs()
@@ -56,8 +60,8 @@ const Dashboard = () => {
         })
 
         reset()
-
-        const blogSnapshot = await getDocs(blogRef);
+        const q = query(blogRef, where('userId', '==', user.uid));
+        const blogSnapshot = await getDocs(q);
         const blogsList = blogSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -115,8 +119,24 @@ const Dashboard = () => {
   </div>
   {/* my blogs section  */}
   <h2 className="dashboard-head">My Blogs</h2>
+
   {/* render all my blogs here  */}
-  <div className="my-blogs-render"></div>
+
+  <div className="my-blogs-render">
+  {
+    renderBlogs.map((blog) => (
+      <div key={blog.id} className="under-rendering">
+        <div className="under-title">
+          <h4>{blog.title}</h4>
+        </div>
+        <div className="under-p">
+          <p className="under">{blog.description}</p>
+        </div>
+      </div>
+    ))
+  }
+</div>
+
  </>
   )
 }
