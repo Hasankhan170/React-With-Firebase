@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { collection, getDocs } from 'firebase/firestore';
+import { collection,getDocs } from 'firebase/firestore';
 import { db} from '../config/FirebaseConfig';
 
 
@@ -13,7 +13,9 @@ function Home() {
     const blogData = []
     querrySnapShot.forEach((doc)=>{
       blogData.push({id:doc.id,...doc.data()})
+      
     })
+    console.log(blogData);
     setAllBlogs(blogData)
    } catch (error) {
     console.log(error);
@@ -21,6 +23,7 @@ function Home() {
   }
 
   useEffect(()=>{
+
     fetchAllBlogs() 
   },[])
   return (
@@ -33,7 +36,12 @@ function Home() {
         <div key={blog.id} className="card w-full bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title">{blog.title}</h2>
-            <p>{blog.description}</p>
+            <p>{blog.description}</p> 
+            {blog.timestamp && (
+              <p className="text-gray-500 text-sm">
+               Posted on: {new Date(blog.timestamp.toDate()).toLocaleString()}
+              </p>
+            )}   
           </div>
         </div>
       ))}

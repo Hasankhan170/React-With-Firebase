@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import '../pages/Dashboard.css'
-import { addDoc, collection,doc,getDoc,getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection,deleteDoc,doc,getDoc,getDocs, query, where } from 'firebase/firestore';
 import { auth, db} from '../config/FirebaseConfig';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -47,7 +47,8 @@ const Dashboard = () => {
    
     return ()=> unSubscribe() // Cleanup function
   },[setProfileGet])
-
+  
+  //fetch user blogs
   useEffect(() => {
     const fecthBlogs = async (userId) => {
       try {
@@ -118,6 +119,19 @@ const Dashboard = () => {
         setLoading(false)
       }
     }
+  }
+
+  const deleteBlog = async (id)=>{
+   try {
+    const docRef = doc(db,"blogs",id);
+    await deleteDoc(docRef)
+    console.log(' delete');
+
+    // Refresh the blog list by filtering out the deleted blog
+    // setRenderBlogs(renderBlogs.filter((blog) => blog.id !== id));
+   } catch (error) {
+    console.log(error);
+   }
   }
 
   
@@ -202,8 +216,8 @@ const Dashboard = () => {
         <div className="under-p">
           <p className="under">{blog.description}</p>
         </div>
-        <div className='flex gap-5 mt-2'>
-          <button className='btn btn-error'>Delete</button>
+        <div className='flex gap-5 mt-5 flex-wrap'>
+          <button onClick={()=>deleteBlog(blog.id)} className='btn btn-error'>Delete</button>
           <button className='btn btn-success'>Edit</button>
         </div>
       </div>
