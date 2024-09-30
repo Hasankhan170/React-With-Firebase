@@ -126,9 +126,8 @@ const Dashboard = () => {
     const docRef = doc(db,"blogs",id);
     await deleteDoc(docRef)
     console.log(' delete');
-
     // Refresh the blog list by filtering out the deleted blog
-    // setRenderBlogs(renderBlogs.filter((blog) => blog.id !== id));
+    setRenderBlogs(renderBlogs.filter((blog) => blog.id !== id));
    } catch (error) {
     console.log(error);
    }

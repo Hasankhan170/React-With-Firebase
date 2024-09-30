@@ -25,6 +25,9 @@ const Login = () => {
       console.log(user);
 
       reset()
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000);
 
       navigate('/Dashboard')
     } catch (error) {
