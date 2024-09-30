@@ -2,11 +2,13 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useForm } from "react-hook-form"
 import { auth } from "../config/FirebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Login = () => {
 
 
   const navigate = useNavigate()
+  const [loading,setLoading] = useState(false)
   const {
     register,
     handleSubmit,
@@ -16,6 +18,7 @@ const Login = () => {
 
   const loginUser = async (data)=>{
     const {email,password} = data;
+    setLoading(true)
     
     try {
       const user = await signInWithEmailAndPassword(auth,email,password);
@@ -26,7 +29,9 @@ const Login = () => {
       navigate('/Dashboard')
     } catch (error) {
       console.log(error);
-      
+      alert('please enter correct email and password')
+    }finally{
+      setLoading(false)
     }
   }
 
@@ -76,9 +81,17 @@ const Login = () => {
           <br />
   
           {/* Submit Button */}
-          <button className="btn btn-warning w-full text-lg text-white">
-            Login
-          </button>
+          {
+  loading ? (
+    <div className="flex justify-center items-center">
+      <span className="loading loading-dots loading-lg text-center"></span>
+    </div>
+  ) : (
+    <button className="btn btn-warning w-full text-lg text-white">
+      Login
+    </button>
+  )
+}
         </form>
       </div>
     </>
