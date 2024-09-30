@@ -10,6 +10,7 @@ const Dashboard = () => {
 
   const [renderBlogs,setRenderBlogs] = useState([])
   const [profileGet,setProfileGet] = useState(null)
+  const [loading,setLoading] = useState(false)
 
 
   const {
@@ -83,6 +84,7 @@ const Dashboard = () => {
   const userBlog = async (data) =>{
 
     const {title,description} = data
+    setLoading(true)
     console.log(data);
 
     const user = auth.currentUser;
@@ -111,6 +113,8 @@ const Dashboard = () => {
         setRenderBlogs(blogsList); 
       } catch (error) {
         console.log(error);
+      }finally{
+        setLoading(false)
       }
     }
   }
@@ -155,7 +159,12 @@ const Dashboard = () => {
       />
       {errors.description && <p style={{ color: 'red' }}>{errors.description.message}</p>}
 
-      <button className="publish-blog bg-warning">Publish Blog</button>
+      {
+        loading?  <div className="flex justify-center items-center">
+        <span className="loading loading-dots loading-lg text-center"></span>
+      </div> : 
+      <button className="publish-blog w-full bg-warning">Publish Blog</button>
+      }
     </form>
   </div>
   {/* my blogs section  */}
