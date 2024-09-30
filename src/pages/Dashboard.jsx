@@ -101,6 +101,7 @@ const Dashboard = () => {
           userId : user.uid,
           title: title,
           description : description,
+          timestamp : new Date(),
         })
 
         reset()
@@ -167,6 +168,8 @@ const Dashboard = () => {
       }
     </form>
   </div>
+
+
   {/* my blogs section  */}
   <h2 className="dashboard-head">My Blogs</h2>
 
@@ -175,21 +178,33 @@ const Dashboard = () => {
   <div className="my-blogs-render">
   {
     renderBlogs.map((blog) => (
-      <div key={blog.id} className="under-rendering">
-        <div className="under-title">
+      <div key={blog.id} className="under-rendering ">
+       <div className='flex justify-between flex-wrap h-auto'>
+       <div  className="under-title flex">
         <img
   style={{
     width: '50px',
-    height: '50px', // Ensure height matches width
-    borderRadius: '50%', // Make the image circular
-    objectFit: 'cover' // This ensures the image covers the circle
+    height: '50px', 
+    borderRadius: '50%', 
+    objectFit: 'cover' 
   }}
   alt="User Avatar"
   src={profileGet} />
-          <h4>{blog.title}</h4>
+          <h3 className='px-5'>{blog.title}</h3>
+        </div>
+        <div>
+        <p style={{fontSize:'12px'}}>{new Date(blog.timestamp.toDate()).toLocaleString()}</p>
+        </div>
+       </div>
+        <div>
+          
         </div>
         <div className="under-p">
           <p className="under">{blog.description}</p>
+        </div>
+        <div className='flex gap-5 mt-2'>
+          <button className='btn btn-error'>Delete</button>
+          <button className='btn btn-success'>Edit</button>
         </div>
       </div>
     ))
