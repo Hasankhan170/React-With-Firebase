@@ -5,11 +5,13 @@ import { doc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 
 const Register = () => {
 
   const navigate = useNavigate()
+  const [loading,setLoading] = useState(false)
 
 
   const {
@@ -21,6 +23,7 @@ const Register = () => {
 
   const registerUser = async (data) => {
     const {name,email,password,file} = data
+    setLoading(true)
     console.log(data);
 
     try {
@@ -53,7 +56,8 @@ const Register = () => {
       console.log(user);
     } catch (error) {
       console.log(error);
-      
+    }finally{
+      setLoading(false)
     }
     
     
@@ -123,9 +127,18 @@ const Register = () => {
           <br />
   
           {/* Submit Button */}
-          <button className="btn btn-warning w-full text-lg text-white">
-            Register
-          </button>
+          {
+  loading ? (
+    <div className="flex justify-center items-center">
+      <span className="loading loading-dots loading-lg text-center"></span>
+    </div>
+  ) : (
+    <button className="btn btn-warning w-full text-lg text-white">
+      Register
+    </button>
+  )
+}
+
         </form>
       </div>
     </>
