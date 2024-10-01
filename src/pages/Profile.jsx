@@ -33,7 +33,6 @@ function Profile() {
   const FileChange = (e) => {
     setFile(e.target.files[0]); // Store the selected file
   };
-
   const updateProfile = async (e)=>{
     e.preventDefault()
     if(!file) return;
@@ -62,8 +61,8 @@ function Profile() {
     }finally{
       setLoading(false)
     }
-    
   }
+
   return (
     <>
     <h1 className="m-5">Profile</h1>
