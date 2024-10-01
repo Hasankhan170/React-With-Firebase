@@ -55,6 +55,7 @@ function Profile() {
 
       setProfileGet(downloadUrl)
       setFile(null)
+      alert('Profile updated successfully!')
       console.log("Profile updated successfully!");
     } catch (error) {
       console.log(error);
