@@ -81,15 +81,12 @@ function Profile() {
           </button>
      </form>
 
-
-
-
-      <h3 className="mb-3">hasan khan</h3>
-      <p className="mb-3">password</p>
-      <input  type="text" placeholder="Type here" className="input input-bordered input-outline-warning w-full mb-3" /><br />
+   <form className="mt-5">
+   <input type="text" placeholder="Type here" className="input input-bordered input-outline-warning w-full mb-3" /><br />
       <input type="text" placeholder="Type here" className="input input-bordered w-full mb-3" /><br />
       <input type="text" placeholder="Type here" className="input input-bordered w-full mb-3" /><br />
       <button className="btn btn-warning">Update</button>
+   </form>
     </div>
     </>
   )
