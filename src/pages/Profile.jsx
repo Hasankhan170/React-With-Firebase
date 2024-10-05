@@ -114,18 +114,31 @@ function Profile() {
     <>
     <h1 className="m-5 mx-10 text-4xl font-bold">Profile</h1>
     <div style={{margin: '0 auto',borderRadius:'10px', boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",marginTop:'25px'}} className="container p-5 mt-40 max-h-max border-black">
-     <form onSubmit={updateProfile} style={{width:"200px",flexDirection:'column',border:'1px solid gray',borderRadius:'10px'}} className="flex text-center justify-center p-3">
-     <img 
+     <form onSubmit={updateProfile} style={{width:"225px",flexDirection:'column',border:'1px solid gray',borderRadius:'10px'}} className="flex text-center justify-center p-3">
+     <div 
   style={{
-    width: '200px', 
-    height: '100px', 
-    borderRadius: '10px', 
-    objectFit: 'cover',
-  }} 
-  className="mb-3" 
-  src={profileGet} 
-  alt="" 
-/>
+    width: '200px',            
+    height: '200px',           
+    borderRadius: '10px',
+    overflow: 'hidden',        
+    position: 'relative',  
+  }}
+>
+  <img 
+    style={{
+      width: '100%',
+      height: 'auto',
+      position: 'absolute',
+      top: '50%',
+      left: '50%', 
+      transform: 'translate(-50%, -50%)',
+      objectFit: 'cover', 
+    }} 
+    src={profileGet} 
+    alt="Profile" 
+  />
+</div>
+
      <div>
       <input type="file" id="fileInput" onChange={FileChange} style={{ display: 'none' }} />
       <label htmlFor="fileInput" className="custom-file-upload ">
