@@ -121,16 +121,15 @@ const Dashboard = () => {
     }
   }
 
-  const deleteBlog = async (id)=>{
-   try {
-    const docRef = doc(db,"blogs",id);
-    await deleteDoc(docRef)
-    console.log(' delete');
-    // Refresh the blog list by filtering out the deleted blog
-    setRenderBlogs(renderBlogs.filter((blog) => blog.id !== id));
-   } catch (error) {
-    console.log(error);
-   }
+  const deleteBlog = async (index)=>{
+
+    try {
+      await deleteDoc(doc(db,"blogs",renderBlogs[index].id)) 
+      setRenderBlogs(renderBlogs.filter((blog)=>blog.id !== renderBlogs[index].id))
+      console.log("delete",index);
+    } catch (error) {
+      console.log(error); 
+    }
   }
 
   
@@ -174,10 +173,7 @@ const Dashboard = () => {
       {errors.description && <p style={{ color: 'red' }}>{errors.description.message}</p>}
 
       {
-        loading?  <div className="flex justify-center items-center">
-        <span className="loading loading-dots loading-lg text-center"></span>
-      </div> : 
-      <button className="publish-blog w-full bg-warning">Publish Blog</button>
+       loading? <button className="publish-blog w-full bg-warning"><span className="loading loading-dots text-lg text-center"></span></button> : <button className="publish-blog w-full bg-warning">Publish Blog</button>
       }
     </form>
   </div>
@@ -190,7 +186,7 @@ const Dashboard = () => {
 
   <div className="my-blogs-render">
   {
-    renderBlogs.map((blog) => (
+    renderBlogs.map((blog,index) => (
       <div key={blog.id} className="under-rendering ">
        <div className='flex justify-between flex-wrap h-auto'>
        <div  className="under-title flex">
@@ -216,7 +212,7 @@ const Dashboard = () => {
           <p className="under">{blog.description}</p>
         </div>
         <div className='flex gap-5 mt-5 flex-wrap'>
-          <button onClick={()=>deleteBlog(blog.id)} className='btn btn-error'>Delete</button>
+          <button onClick={()=>deleteBlog(index)} className='btn btn-error'>Delete</button>
           <button className='btn btn-success'>Edit</button>
         </div>
       </div>
