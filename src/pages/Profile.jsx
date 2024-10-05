@@ -75,6 +75,7 @@ function Profile() {
 
   const passwordUpdate = async (data)=>{
     const {oldPassword,newPassword} = data;
+    
 
     const user = auth.currentUser
     if(user){
@@ -82,6 +83,7 @@ function Profile() {
         user.email,
         oldPassword
       )
+      setLoading(true)
 
       try {
          // Re-authenticate the user
@@ -93,6 +95,8 @@ function Profile() {
       } catch (error) {
         console.log(error);
         alert("please enter your correct password");
+      }finally{
+        setLoading(false)
       }
     }else{
       console.log("User not signed in");
@@ -160,12 +164,9 @@ function Profile() {
           />
           {errors.newPassword && <p className="text-red-500 mb-5">{errors.newPassword.message}</p>}
 
-          <button
-            type="submit"
-            className="btn btn-warning"
-          >
-            Update
-          </button>
+          {
+           loading ? <button className="btn btn-warning w-full text-lg text-white"><span className="loading loading-dots loading-lg text-center"></span></button> : <button className="btn btn-warning w-full text-lg text-white">Update</button>
+        }
         </form>
     </div>
     </>
