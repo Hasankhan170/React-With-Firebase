@@ -26,10 +26,11 @@ const Login = () => {
 
       reset()
       setTimeout(() => {
-        window.location.reload()
+        alert('successfully logged in')
+        navigate('/Dashboard')
       }, 1000);
 
-      navigate('/Dashboard')
+      
     } catch (error) {
       console.log(error);
       alert('please enter correct email and password')
@@ -84,17 +85,15 @@ const Login = () => {
           <br />
   
           {/* Submit Button */}
-          {
-  loading ? (
-    <div className="flex justify-center items-center">
-      <span className="loading loading-dots loading-lg text-center"></span>
-    </div>
-  ) : (
-    <button className="btn btn-warning w-full text-lg text-white">
-      Login
-    </button>
-  )
-}
+        {
+           loading ? <button className="btn btn-warning w-full text-lg text-white"><span className="loading loading-dots loading-lg text-center"></span></button> : <button className="btn btn-warning w-full text-lg text-white">Login</button>
+        }
+
+
+
+
+
+ 
         </form>
       </div>
     </>
