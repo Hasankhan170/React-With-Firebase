@@ -41,43 +41,55 @@ function Home() {
   }, []);
   return (
     <>
-   <div className="container mx-auto p-4">
-  <h1 className="text-3xl font-bold mb-4">All Blogs</h1>
-  {allBlogs.length > 0 ? (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {allBlogs.map((blog) => (
-        <div key={blog.id} className="card w-full bg-base-100 shadow-xl">
-          <div className="card-body">
-           {blog.profileImage && (
-                  <img
-                    src={blog.profileImage}
-                    alt="User Profile"
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-4">All Blogs</h1>
+        {allBlogs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allBlogs.map((blog) => (
+              <div key={blog.id} className="card w-full bg-base-100 shadow-xl" style={{ minHeight: '250px' }}>
+                <div className="card-body" style={{ padding: '16px' }}>
+                  {blog.profileImage && (
+                    <img
+                      src={blog.profileImage}
+                      alt="User Profile"
+                      style={{
+                        width: '50px',
+                        height: '50px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  )}
+                  <h2 className="card-title">{blog.title}</h2>
+                  <div
                     style={{
-                      width: '50px',
-                      height: '50px',
-                      borderRadius: '50%',
-                      objectFit: 'cover',
+                      maxHeight: '100px', // Adjust height for the description area
+                      overflowY: 'auto', // Enable vertical scrolling
+                      overflowX: 'hidden', // Hide horizontal overflow
+                      display: 'block', // Ensure block display for line breaks
+                      paddingRight: '5px', // Prevent text cutoff
                     }}
-                  />
-                )}
-            <h2 className="card-title">{blog.title}</h2>
-            <p>{blog.description}</p> 
-            {blog.timestamp && (
-              <p className="text-gray-500 text-sm">
-               Posted on: {new Date(blog.timestamp.toDate()).toLocaleString()}
-              </p>
-            )}   
+                  >
+                    {blog.description}
+                  </div>
+                  {blog.timestamp && (
+                    <p className="text-gray-500 text-sm">
+                      Posted on: {new Date(blog.timestamp.toDate()).toLocaleString()}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <p>No blogs available.</p>
-  )}
-</div>
-
+        ) : (
+          <p>No blogs available.</p>
+        )}
+      </div>
     </>
-  )
+  );
+  
+  
+  
 }
 
 export default Home

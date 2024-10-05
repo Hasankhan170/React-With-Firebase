@@ -230,9 +230,9 @@ const Dashboard = () => {
       />
       {errors.description && <p style={{ color: 'red' }}>{errors.description.message}</p>}
 
-      {
-       loading? <button className="publish-blog w-full bg-warning"><span className="loading loading-dots text-lg text-center"></span></button> : <button className="publish-blog w-full bg-warning">Publish Blog</button>
-      }
+        {
+           loading ? <button className="btn btn-warning w-full text-lg text-white"><span className="loading loading-dots loading-lg text-center"></span></button> : <button className="btn btn-warning w-full text-lg text-white">Publish</button>
+        }
     </form>
   </div>
 
@@ -270,8 +270,8 @@ const Dashboard = () => {
           <p className="under">{blog.description}</p>
         </div>
         <div className='flex gap-5 mt-5 flex-wrap'>
-          <button onClick={()=>deleteBlog(index)} className='btn btn-error'>Delete</button>
-          <button onClick={()=>editBlog(index)} className='btn btn-success'>Edit</button>
+          <button onClick={()=>deleteBlog(index)} className='btn hover:bg-red-500'>Delete</button>
+          <button onClick={()=>editBlog(index)} className='btn hover:bg-emerald-500'>Edit</button>
         </div>
       </div>
     ))

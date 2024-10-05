@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 import { auth, db } from "./config/FirebaseConfig";
-import { doc, getDoc } from "firebase/firestore"; // Import Firestore methods
+import { doc, getDoc } from "firebase/firestore"; 
 
 function App() {
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
