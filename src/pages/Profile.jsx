@@ -66,7 +66,7 @@ function Profile() {
 
   return (
     <>
-    <h1 className="m-5">Profile</h1>
+    <h1 className="m-5 mx-10 text-4xl font-bold">Profile</h1>
     <div style={{margin: '0 auto',borderRadius:'10px', boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",marginTop:'25px'}} className="container p-5 mt-40 max-h-max border-black">
      <form onSubmit={updateProfile} style={{width:"200px",flexDirection:'column',border:'1px solid gray',borderRadius:'10px'}} className="flex text-center justify-center p-3">
      <img width={200} style={{borderRadius:'10px'}} className="mb-3" src={profileGet} alt="" />
