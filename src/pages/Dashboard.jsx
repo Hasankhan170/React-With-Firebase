@@ -200,7 +200,7 @@ const Dashboard = () => {
     </div>
   </header>
   {/* dashboard section  */}
-  <h1 className="dashboard-head">Dashboard</h1>
+  <h3 className="m-5 mx-10 text-4xl font-bold">DashBoard</h3>
   {/* dashboard form  */}
   <div className="dashboard-main">
   <form onSubmit={handleSubmit(userBlog)} className="dashboard-form">
@@ -238,7 +238,7 @@ const Dashboard = () => {
 
 
   {/* my blogs section  */}
-  <h2 className="dashboard-head">My Blogs</h2>
+  <h3 className="m-5 mx-10 text-4xl font-bold">My Blogs</h3>
 
   {/* render all my blogs here  */}
 
