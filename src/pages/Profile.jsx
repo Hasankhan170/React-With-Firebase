@@ -2,6 +2,8 @@ import { doc, getDoc, updateDoc } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { auth, db, storage } from "../config/FirebaseConfig"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { useForm } from "react-hook-form"
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth"
 
 
 function Profile() {
@@ -9,6 +11,12 @@ function Profile() {
   const [profileGet,setProfileGet] = useState(null)
   const [file,setFile] = useState(null)
   const [loading,setLoading] = useState(false)
+  const {
+     register,
+     handleSubmit,
+     reset,
+    formState: { errors } } = useForm();
+  // const [showError, setShowError] = useState(false);
 
   useEffect(()=>{
     const fetchProfile = async(user)=>{
@@ -64,6 +72,37 @@ function Profile() {
     }
   }
 
+
+  const passwordUpdate = async (data)=>{
+    const {oldPassword,newPassword} = data;
+
+    const user = auth.currentUser
+    if(user){
+      const  credential = EmailAuthProvider.credential(
+        user.email,
+        oldPassword
+      )
+
+      try {
+         // Re-authenticate the user
+        await reauthenticateWithCredential(user, credential)
+
+         // Update the password
+         await updatePassword(user, newPassword)
+         alert("Password updated successfully!");
+      } catch (error) {
+        console.log(error);
+        alert("please enter your correct password");
+      }
+    }else{
+      console.log("User not signed in");
+      alert("You need to be signed in to update your profile.");
+    }
+
+    reset()
+    
+  }
+
   return (
     <>
     <h1 className="m-5 mx-10 text-4xl font-bold">Profile</h1>
@@ -91,12 +130,43 @@ function Profile() {
           </button>
      </form>
 
-   <form className="mt-5">
-    <h3 className="font-bold p-2 mb-3">Password</h3>
-      <input type="text" placeholder="Old Password" className="input input-bordered input-outline-warning w-full mb-3" /><br />
-      <input type="text" placeholder="New Password" className="input input-bordered w-full mb-3" /><br />
-      <button className="btn btn-warning">Update</button>
-   </form>
+     <form className="mt-5" onSubmit={handleSubmit(passwordUpdate)}>
+          <h3 className="font-bold p-2 mb-3">Password</h3>
+          <input
+            type="password"
+            placeholder="Enter Your Old Password"
+            className="input input-bordered w-full mb-5"
+            {...register("oldPassword", {
+              required: "Old Password is required",
+              minLength: {
+                value: 6,
+                message: "Old Password must be at least 6 characters",
+              },
+            })}
+          />
+          {errors.oldPassword && <p className="text-red-500 mb-5">{errors.oldPassword.message}</p>}
+
+          <input
+            type="password"
+            placeholder="Enter Your New Password"
+            className="input input-bordered w-full mb-5"
+            {...register("newPassword", {
+              required: "New Password is required",
+              minLength: {
+                value: 6,
+                message: "New Password must be at least 6 characters",
+              },
+            })}
+          />
+          {errors.newPassword && <p className="text-red-500 mb-5">{errors.newPassword.message}</p>}
+
+          <button
+            type="submit"
+            className="btn btn-warning"
+          >
+            Update
+          </button>
+        </form>
     </div>
     </>
   )
