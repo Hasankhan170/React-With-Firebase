@@ -11,9 +11,15 @@ const Dashboard = () => {
   const [renderBlogs,setRenderBlogs] = useState([])
   const [profileGet,setProfileGet] = useState(null)
   const [loading,setLoading] = useState(false)
+  //delete states
   const [openModal,setOpenModal] = useState(false)
   const [deleteModal,setDeleteModal] = useState("")
   const [blogToDelete, setBlogToDelete] = useState(null);
+
+  //edit state
+  const [openEditModal,setOpenEditModal] = useState(false)
+  const [editData, setEditData] = useState({title:'' , description: ''})
+  const [blogToEdit, setBlogToEdit] = useState(null);
 
 
 
@@ -151,36 +157,40 @@ const Dashboard = () => {
     setOpenModal(false)
     setDeleteModal("")
     setBlogToDelete(null)
+    setOpenEditModal(false)
+    setEditData({title:'',description:''})
   }
 
 
  //edit work
-  const editBlog = async(index)=>{
-    const editTitle = prompt('enter your new title')
-    const editDescripition = prompt('enter your new description')
-    if(editTitle && editDescripition){
-      try {
-       const blogRef = doc(db,"blogs",renderBlogs[index].id)
-       await updateDoc(blogRef,{
-         title : editTitle,
-         description : editDescripition,
-         timestamp : new Date(),
-       })
 
-       setRenderBlogs(renderBlogs.map((blog,i)=>{
-         if(i === index){
-           return {...blog, title: editTitle, description: editDescripition}
-         }
-         return blog
-       }))
-        
-      } catch (error) {
-        console.log(error);
-      }
+ const editBlog = (index)=>{
+  const blogToEdit = renderBlogs[index]
+  setEditData({title: blogToEdit.title, description: blogToEdit.description})
+  setBlogToEdit(index)
+  setOpenEditModal(true)
+ }
+
+ const updateBlogs = async()=>{
+  if(blogToEdit !== null){
+    try {
+      const blogRef = doc(db,"blogs",renderBlogs[blogToEdit].id)
+           await updateDoc(blogRef,{
+             title : editData.title,
+             description : editData.description,
+             timestamp : new Date(),
+           })
+           setRenderBlogs(renderBlogs.map((blog,index)=>{
+           return index === blogToEdit ? {...blog ,title : editData.title, description: editData.description} : blog
+           }))
+    } catch (error) {
+      console.log(error);
+    }finally {
+      closeModal();
     }
-
-   
   }
+ }
+  
 
   return (
     <>
@@ -295,6 +305,45 @@ const Dashboard = () => {
     </div>
   </div>
 )}
+
+
+
+  {/* Edit Modal */}
+  {openEditModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4 sm:mx-auto border border-gray-300">
+            <h2 className="text-lg font-bold mb-4">Edit Blog</h2>
+            <input
+              type="text"
+              value={editData.title}
+              onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+              placeholder="Updated title"
+              className="input input-bordered text-base w-full mb-4"
+            />
+            <textarea
+              value={editData.description}
+              onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+              placeholder="Updated description"
+              className="textarea textarea-bordered text-base w-full mb-4"
+            ></textarea>
+            <div className="flex justify-between">
+              <button
+                onClick={updateBlogs}
+                className="btn btn-primary text-white px-4 py-2 rounded-lg"
+              >
+                Update
+              </button>
+              <button
+                onClick={closeModal}
+                className="btn btn-gray bg-gray-400 text-white px-4 py-2 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
 
 
 
