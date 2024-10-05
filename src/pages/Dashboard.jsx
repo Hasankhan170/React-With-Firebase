@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import '../pages/Dashboard.css'
-import { addDoc, collection,deleteDoc,doc,getDoc,getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection,deleteDoc,doc,getDoc,getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { auth, db} from '../config/FirebaseConfig';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -127,7 +127,7 @@ const Dashboard = () => {
 
   const deleteBlog = (index)=>{
     setBlogToDelete(index)
-    setDeleteModal("are you sure you want to delete this blog?")
+    setDeleteModal("Are you sure you want to delete this blog?")
     setOpenModal(true)
   }
 
@@ -143,24 +143,43 @@ const Dashboard = () => {
         closeModal()
       }
     }
-
-    // try {
-    //   await deleteDoc(doc(db,"blogs",renderBlogs[index].id)) 
-    //   setRenderBlogs(renderBlogs.filter((blog)=>blog.id !== renderBlogs[index].id))
-    //   console.log("delete",index);
-    //   setBlogToDelete(index)
-    //   setDeleteModal("are you sure you want to delete this blog?")
-    //   setOpenModal(true)
-    // } catch (error) {
-    //   console.log(error); 
-    // }
   }
+
+
 
   const closeModal = ()=>{
     setOpenModal(false)
     setDeleteModal("")
     setBlogToDelete(null)
+  }
 
+
+ //edit work
+  const editBlog = async(index)=>{
+    const editTitle = prompt('enter your new title')
+    const editDescripition = prompt('enter your new description')
+    if(editTitle && editDescripition){
+      try {
+       const blogRef = doc(db,"blogs",renderBlogs[index].id)
+       await updateDoc(blogRef,{
+         title : editTitle,
+         description : editDescripition,
+         timestamp : new Date(),
+       })
+
+       setRenderBlogs(renderBlogs.map((blog,i)=>{
+         if(i === index){
+           return {...blog, title: editTitle, description: editDescripition}
+         }
+         return blog
+       }))
+        
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+   
   }
 
   return (
@@ -213,7 +232,7 @@ const Dashboard = () => {
 
   {/* render all my blogs here  */}
 
-  <div className="my-blogs-render">
+  <div className="my-blogs-render mb-4">
   {
     renderBlogs.map((blog,index) => (
       <div key={blog.id} className="under-rendering ">
@@ -242,7 +261,7 @@ const Dashboard = () => {
         </div>
         <div className='flex gap-5 mt-5 flex-wrap'>
           <button onClick={()=>deleteBlog(index)} className='btn btn-error'>Delete</button>
-          <button className='btn btn-success'>Edit</button>
+          <button onClick={()=>editBlog(index)} className='btn btn-success'>Edit</button>
         </div>
       </div>
     ))
@@ -262,7 +281,7 @@ const Dashboard = () => {
       <div className="flex justify-between">
         <button
           onClick={closeModal}
-          className="btn btn-secondary text-white px-4 py-2 rounded-lg transition duration-200 ease-in-out transform hover:bg-gray-300 hover:scale-105"
+          className="btn btn-gray bg-gray-300 text-white px-4 py-2 rounded-lg transition duration-200 ease-in-out transform hover:bg-gray-300 hover:scale-105"
         >
           Cancel
         </button>
