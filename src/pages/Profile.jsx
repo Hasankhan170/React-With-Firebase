@@ -11,6 +11,7 @@ function Profile() {
   const [profileGet,setProfileGet] = useState(null)
   const [file,setFile] = useState(null)
   const [loading,setLoading] = useState(false)
+  const [passwordLoading,setPasswordLoading] = useState(false)
   const {
      register,
      handleSubmit,
@@ -83,7 +84,7 @@ function Profile() {
         user.email,
         oldPassword
       )
-      setLoading(true)
+      setPasswordLoading(true)
 
       try {
          // Re-authenticate the user
@@ -96,7 +97,7 @@ function Profile() {
         console.log(error);
         alert("please enter your correct password");
       }finally{
-        setLoading(false)
+        setPasswordLoading(false)
       }
     }else{
       console.log("User not signed in");
@@ -165,7 +166,7 @@ function Profile() {
           {errors.newPassword && <p className="text-red-500 mb-5">{errors.newPassword.message}</p>}
 
           {
-           loading ? <button className="btn btn-warning w-full text-lg text-white"><span className="loading loading-dots loading-lg text-center"></span></button> : <button className="btn btn-warning w-full text-lg text-white">Update</button>
+           passwordLoading? <button className="btn btn-warning w-full text-lg text-white"><span className="loading loading-dots loading-lg text-center"></span></button> : <button className="btn btn-warning w-full text-lg text-white">Update</button>
         }
         </form>
     </div>
