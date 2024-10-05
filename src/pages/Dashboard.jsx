@@ -11,6 +11,10 @@ const Dashboard = () => {
   const [renderBlogs,setRenderBlogs] = useState([])
   const [profileGet,setProfileGet] = useState(null)
   const [loading,setLoading] = useState(false)
+  const [openModal,setOpenModal] = useState(false)
+  const [deleteModal,setDeleteModal] = useState("")
+  const [blogToDelete, setBlogToDelete] = useState(null);
+
 
 
   const {
@@ -121,18 +125,43 @@ const Dashboard = () => {
     }
   }
 
-  const deleteBlog = async (index)=>{
-
-    try {
-      await deleteDoc(doc(db,"blogs",renderBlogs[index].id)) 
-      setRenderBlogs(renderBlogs.filter((blog)=>blog.id !== renderBlogs[index].id))
-      console.log("delete",index);
-    } catch (error) {
-      console.log(error); 
-    }
+  const deleteBlog = (index)=>{
+    setBlogToDelete(index)
+    setDeleteModal("are you sure you want to delete this blog?")
+    setOpenModal(true)
   }
 
-  
+  const confirmDelete = async ()=>{
+
+    if(blogToDelete !== null){
+      try {
+        await deleteDoc(doc(db,"blogs",renderBlogs[blogToDelete].id))
+        setRenderBlogs(renderBlogs.filter((blog)=>blog.id !== renderBlogs[blogToDelete].id))
+      } catch (error) {
+        console.log(error);
+      }finally{
+        closeModal()
+      }
+    }
+
+    // try {
+    //   await deleteDoc(doc(db,"blogs",renderBlogs[index].id)) 
+    //   setRenderBlogs(renderBlogs.filter((blog)=>blog.id !== renderBlogs[index].id))
+    //   console.log("delete",index);
+    //   setBlogToDelete(index)
+    //   setDeleteModal("are you sure you want to delete this blog?")
+    //   setOpenModal(true)
+    // } catch (error) {
+    //   console.log(error); 
+    // }
+  }
+
+  const closeModal = ()=>{
+    setOpenModal(false)
+    setDeleteModal("")
+    setBlogToDelete(null)
+
+  }
 
   return (
     <>
@@ -219,6 +248,36 @@ const Dashboard = () => {
     ))
   }
 </div>
+
+
+
+  {/* Success Modal */}
+  {openModal && (
+  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="bg-white p-8 rounded-lg shadow-xl max-w-md w-full mx-4 sm:mx-auto border border-gray-300">
+      <h2 className="text-lg font-bold text-center text-green-600 mb-4">
+        Success!
+      </h2>
+      <p className="text-center text-gray-800 mb-4 font-semibold">{deleteModal}</p>
+      <div className="flex justify-between">
+        <button
+          onClick={closeModal}
+          className="btn btn-secondary text-white px-4 py-2 rounded-lg transition duration-200 ease-in-out transform hover:bg-gray-300 hover:scale-105"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={confirmDelete}
+          className="btn btn-error text-white px-4 py-2 rounded-lg transition duration-200 ease-in-out transform bg-red-600 hover:bg-red-700 hover:scale-105"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
 
  </>
   )
