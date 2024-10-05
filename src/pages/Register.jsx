@@ -48,8 +48,12 @@ const Register = () => {
       })
 
       reset()
+      setTimeout(()=>{
+        alert('successfully registered')
+        navigate('/Login')
+      },1000)
 
-      navigate('/Login')
+      
 
       
 
@@ -128,16 +132,8 @@ const Register = () => {
   
           {/* Submit Button */}
           {
-  loading ? (
-    <div className="flex justify-center items-center">
-      <span className="loading loading-dots loading-lg text-center"></span>
-    </div>
-  ) : (
-    <button className="btn btn-warning w-full text-lg text-white">
-      Register
-    </button>
-  )
-}
+             loading ? <button className="btn btn-warning w-full text-lg text-white"> <span className="loading loading-dots loading-lg text-center"></span></button> : <button className="btn btn-warning w-full text-lg text-white">Register</button>
+          }
 
         </form>
       </div>
