@@ -4,10 +4,11 @@ import { auth, db, storage } from "../config/FirebaseConfig"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { useForm } from "react-hook-form"
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from "firebase/auth"
+import { useOutletContext } from "react-router-dom"
 
 
 function Profile() {
-
+  const { updateProfileImage } = useOutletContext();
   const [profileGet,setProfileGet] = useState(null)
   const [file,setFile] = useState(null)
   const [loading,setLoading] = useState(false)
@@ -63,6 +64,7 @@ function Profile() {
       })
 
       setProfileGet(downloadUrl)
+      updateProfileImage(downloadUrl); 
       setFile(null)
       alert('Profile updated successfully!')
       console.log("Profile updated successfully!");
